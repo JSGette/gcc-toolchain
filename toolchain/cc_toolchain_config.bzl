@@ -29,6 +29,7 @@ load(
     "tool_path",
     "with_feature_set",
 )
+load("@rules_cc//cc:defs.bzl", "CcToolchainConfigInfo", "cc_common")
 load("//toolchain/fortran:action_names.bzl", FORTRAN_ACTION_NAMES = "ACTION_NAMES")
 
 base_compile_actions = [

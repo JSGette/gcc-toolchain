@@ -118,106 +118,91 @@ def _gcc_toolchain_impl(rctx):
 
     extra_cflags = [
         "-nostdinc",
-        "-B", "%workspace%/bin",
-        "-B", "%workspace%/xbin",
+        "-B%workspace%/bin",
+        "-B%workspace%/xbin",
     ]
     extra_cflags.extend([
-        flag
+        "-isystem{}".format(include)
         for include in c_builtin_includes
-        for flag in ["-isystem", include]
     ])
     extra_cflags.extend([
-        flag
+        "-I{}".format(include)
         for include in rctx.attr.includes
-        for flag in ["-I", include]
     ])
     extra_cflags.extend(rctx.attr.extra_cflags)
 
     extra_cxxflags = [
         "-nostdinc",
         "-nostdinc++",
-        "-B", "%workspace%/bin",
-        "-B", "%workspace%/xbin",
+        "-B%workspace%/bin",
+        "-B%workspace%/xbin",
     ]
     extra_cxxflags.extend([
-        flag
+        "-isystem{}".format(include)
         for include in cxx_builtin_includes
-        for flag in ["-isystem", include]
     ])
     extra_cxxflags.extend([
-        flag
+        "-isystem{}".format(include)
         for include in c_builtin_includes
-        for flag in ["-isystem", include]
     ])
     extra_cxxflags.extend([
-        flag
+        "-I{}".format(include)
         for include in rctx.attr.includes
-        for flag in ["-I", include]
     ])
     extra_cxxflags.extend(rctx.attr.extra_cxxflags)
 
     extra_fflags = [
         "-nostdinc",
-        "-B", "%workspace%/bin",
-        "-B", "%workspace%/xbin",
+        "-B%workspace%/bin",
+        "-B%workspace%/xbin",
     ]
     extra_fflags.extend([
-        flag
+        "-I{}".format(include)
         for include in f_builtin_includes
-        for flag in ["-I", include]
     ])
     extra_fflags.extend([
-        flag
+        "-I{}".format(include)
         for include in c_builtin_includes
-        for flag in ["-I", include]
     ])
     extra_fflags.extend([
-        flag
+        "-I{}".format(finclude)
         for finclude in rctx.attr.fincludes
-        for flag in ["-I", finclude]
     ])
     extra_fflags.extend(rctx.attr.extra_fflags)
 
     extra_ldflags = [
-        flag.format(include_prefix = include_prefix)
+        lib.format(
+            include_prefix = include_prefix,
+        )
         for lib in [
-            "%workspace%/bin",
-            "%workspace%/xbin",
-            "%workspace%/lib",
-            "%workspace%/{include_prefix}lib",
-            "%workspace%/lib64",
-            "%workspace%/{include_prefix}lib64",
-            "%workspace%/{include_prefix}sysroot/lib",
-            "%workspace%/{include_prefix}sysroot/usr/lib",
+            "-B%workspace%/bin",
+            "-B%workspace%/xbin",
+            "-B%workspace%/lib",
+            "-B%workspace%/{include_prefix}lib",
+            "-B%workspace%/lib64",
+            "-B%workspace%/{include_prefix}lib64",
+            "-B%workspace%/{include_prefix}sysroot/lib",
+            "-B%workspace%/{include_prefix}sysroot/usr/lib",
+            "-L%workspace%/lib",
+            "-L%workspace%/{include_prefix}lib",
+            "-L%workspace%/lib64",
+            "-L%workspace%/{include_prefix}lib64",
+            "-L%workspace%/{include_prefix}sysroot/lib",
+            "-L%workspace%/{include_prefix}sysroot/usr/lib",
         ]
-        for flag in ["-B", lib]
     ]
-    extra_ldflags.extend([
-        flag.format(include_prefix = include_prefix)
-        for lib in [
-            "%workspace%/lib",
-            "%workspace%/{include_prefix}lib",
-            "%workspace%/lib64",
-            "%workspace%/{include_prefix}lib64",
-            "%workspace%/{include_prefix}sysroot/lib",
-            "%workspace%/{include_prefix}sysroot/usr/lib",
-        ]
-        for flag in ["-L", lib]
-    ])
     extra_ldflags.extend(rctx.attr.extra_ldflags)
 
     extra_asmflags = [
         "-nostdinc",
     ]
     extra_asmflags.extend([
-        flag
+        "-isystem{}".format(include)
         for include in c_builtin_includes
-        for flag in ["-isystem", include]
     ])
     extra_asmflags.extend([
-        flag
+        "-I{}".format(include)
         for include in rctx.attr.includes
-        for flag in ["-I", include]
     ])
     extra_asmflags.extend(rctx.attr.extra_asmflags)
 

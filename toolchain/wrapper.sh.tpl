@@ -31,21 +31,6 @@ args=("$@")
 for i in "${!args[@]}"; do
     val="${args[i]}"
 
-    # Absolutize relative paths in -isystem, -I, -B, -L flags only when the
-    # path doesn't resolve from CWD. Standard Bazel C++ actions run from the
-    # execroot where these relative paths work; Cargo build scripts (cc-rs) run
-    # from a different CWD where they don't.
-    for prefix in "-isystem" "-I" "-B" "-L"; do
-        if [[ "${val}" == "${prefix}"* ]]; then
-            path="${val#"${prefix}"}"
-            if [[ -n "${path}" && "${path}" != "/"* && "${path}" == */* && ! -d "${path}" ]]; then
-                if [ -n "${EXT_BUILD_ROOT:-}" ]; then path=${path/"${EXT_BUILD_ROOT}/"/""}; fi
-                args[i]="${prefix}${EXECROOT}/${path}"
-            fi
-            break
-        fi
-    done
-
     # Make --sysroot flag absolute for GCC.
     if [[ "${val}" == "--sysroot" ]]; then
         next_index=$((i+1))
